@@ -45,7 +45,7 @@ if len(sys.argv) > 1:
      search_term = str(sys.argv[1])
 
 # number of links to collect
-MAX_COUNT = 1000
+MAX_COUNT = 18
 count = 1
 url =""
 value =0
@@ -77,6 +77,15 @@ try:
     if count > MAX_COUNT:
         print("\n\n")
         print(len(blank_dict))
+        for x in range(0,len(blank_dict)-MAX_COUNT):
+            blank_dict.popitem()
+        print(len(blank_dict))
+        # swap
+        blank_dict = {value:key for key, value in blank_dict.items()}
+        myfile = "dict.txt"
+        with open(myfile, 'w') as f: 
+            for key, value in blank_dict.items(): 
+                f.write('%s:%s\n' % (key, value)) 
         break
 except tweepy.TweepError as e:
   print ("Tweepy Error: %s" % str(e))
