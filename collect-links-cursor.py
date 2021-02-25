@@ -85,7 +85,7 @@ try:
         myfile = "dict.txt"
         with open(myfile, 'w') as f: 
             for key, value in blank_dict.items(): 
-                f.write('%s:%s\n' % (key, value)) 
+                f.write('%s' % (value)) 
         break
 except tweepy.TweepError as e:
   print ("Tweepy Error: %s" % str(e))
