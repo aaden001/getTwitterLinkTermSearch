@@ -45,7 +45,7 @@ if len(sys.argv) > 1:
      search_term = str(sys.argv[1])
 
 # number of links to collect
-MAX_COUNT = 18
+MAX_COUNT = 1000
 count = 1
 url =""
 value =0
