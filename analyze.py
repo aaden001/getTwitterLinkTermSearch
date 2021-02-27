@@ -5,9 +5,11 @@ Created on Fri Feb 26 10:44:02 2021
 @author: adeni
 """
 import pandas as pd
+import sidetable
 import json
 from json.decoder import JSONDecodeError
 from collections import OrderedDict
+
 letCount = {}
 count = 1
 previous =0
@@ -15,7 +17,7 @@ MAX_MOMENTOUS = []
 
 for x in range(1000):
     #configure file ordering
-    file = "json/"+ str(count) + ".json"
+    file = "Q2/json/"+ str(count) + ".json"
     try:
         with open(file, "rb") as f:
            #load file in a variable
@@ -28,7 +30,7 @@ for x in range(1000):
                #get length of memento and store a new number of mementos found
                letCount[len(data['mementos']['list'])] = 1
                previous =  len(data['mementos']['list'])
-           #Gets the highest 10000 mementos urls     
+           #Gets URL with mementos > 10000     
            if(previous> 10000):
                 #saved in a list
                 MAX_MOMENTOUS.append(data['original_uri'])
@@ -44,8 +46,18 @@ for x in range(1000):
     count = count +1
 #sort and store
 dict1 = OrderedDict(sorted(letCount.items()))
+#convert to pandas object
+df =pd.DataFrame(dict1.items(), columns=['Mementos','URI-Rs'])
+#store as a csv file
+df.to_csv("Q2/mementosURI-Rs.csv",index=False)
+#[print(key,':',value) for key,value in dict1.items()]
+#print("\n\n")
 
-[print(key,':',value) for key,value in dict1.items()]
+#convert list of top mementos URL-Rs to pandas object
+f = pd.DataFrame(data=[*(MAX_MOMENTOUS)], columns=['Top URI-R With the Most Mementos'])
+f.to_csv("Q2/topMentos.csv",index=False)
+print(df)
 print("\n\n")
-print(len(MAX_MOMENTOUS))
+print(f)
+
 
