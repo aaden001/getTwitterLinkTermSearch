@@ -11,30 +11,32 @@ def resovle_url(base_url,count):
     value =0
     url=""
     try:
-        request = requests.head(base_url,allow_redirects=True,timeout=2.5)     
+        #request the link gotten set time out 2.5 seconds
+        # This was actually useful to ensure that linked 
+        #gotten would not take to much time during redirection
+        request = requests.head(base_url,allow_redirects=True,timeout=2.5)
+        
+        #Ensure a 200 responds 
         if (request.status_code == 200):
+            #Gets the domain of the URI
             domain = urlparse(request.url).netloc
+            #Ensures its not a twitter domain
             if domain.find("twitter.com") ==-1:
                 url  = request.url
                 value =1
-                """
-                print("{} {}    :      {}".format( count,base_url,request.url))
-                print("\n")
-                if(blank_dict.get(request.url) != None):
-                    pass
-                else:
-                    #store link
-                    blank_dict[request.url] = count
-                """
             else:
+                #Reduce the counter because link wasnt resolved bc it a twitter domain
                 count = count -1      
         else:
+            #Reduce the counter because link wasnt resolved
             count = count -1
         request.raise_for_status()
     except requests.exceptions.HTTPError as http_err:
         pass
         #print(f'HTTP error occurred: {http_err}')
     except Exception as err:
+        #Reduce the counter because link wasnt resolved due to errors
+        #from the link given
         count = count -1
         #print(f'Other error occurred: {err}')    
     return  count,value, url
@@ -62,27 +64,32 @@ try:
   for page in tweepy.Cursor(api.search, q=search_term, tweet_mode='extended', lang='en').pages():
     for tweet in page:
          for link in tweet.entities["urls"]:
+             #resolve a the link gotten from twitter
              count,value, url = resovle_url(link['expanded_url'],count)
-             #print(count)
-             
              if value != 0 :
                  if(blank_dict.get(url) != None):
+                    #reduce count value if link could not be resolved
                     count = count - 1
                  else:
-                    #store link
-                    print(count)
-                    print(url)
+                    #print(count)
+                    #print(url)
+                    #store link and Ensures distinct url
                     blank_dict[url] = count
              count = count + 1       
     if count > MAX_COUNT:
-        print("\n\n")
-        print(len(blank_dict))
+        #print("\n\n") 
+        #print(len(blank_dict))
         for x in range(0,len(blank_dict)-MAX_COUNT):
+            #Remove excess link added only 1000 distinct links needed
             blank_dict.popitem()
-        print(len(blank_dict))
-        # swap
+        #used for debugging and print to console to see result values
+        print(blank_dict)
+        #print(len(blank_dict))
+        # swap values with keys
         blank_dict = {value:key for key, value in blank_dict.items()}
-        myfile = "dict.txt"
+        
+        #print result  in folder Q1
+        myfile = "Q1\dict.txt"
         with open(myfile, 'w') as f: 
             for key, value in blank_dict.items(): 
                 f.write('%s' % (value)) 
