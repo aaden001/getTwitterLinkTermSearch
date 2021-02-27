@@ -31,7 +31,7 @@ for x in range(1000):
                letCount[len(data['mementos']['list'])] = 1
                previous =  len(data['mementos']['list'])
            #Gets URL with mementos > 10000     
-           if(previous> 10000):
+           if(previous> 40000):
                 #saved in a list
                 MAX_MOMENTOUS.append(data['original_uri'])
     except JSONDecodeError  as e:
@@ -56,6 +56,8 @@ df.to_csv("Q2/mementosURI-Rs.csv",index=False)
 #convert list of top mementos URL-Rs to pandas object
 f = pd.DataFrame(data=[*(MAX_MOMENTOUS)], columns=['Top URI-R With the Most Mementos'])
 f.to_csv("Q2/topMentos.csv",index=False)
+
+#For console viewing
 print(df)
 print("\n\n")
 print(f)
