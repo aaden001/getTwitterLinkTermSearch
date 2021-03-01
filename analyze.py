@@ -12,7 +12,7 @@ from collections import OrderedDict #for ordering a dictionary
 from datetime import datetime #
 import seaborn as sns
 #from matplotlib.ticker import MultipleLocator
-
+old = 0 # track URI less old than a week
 letCount = {}
 accessDate = {}
 dateAccessed = "2021-02-26T21:30:00Z"
@@ -36,6 +36,7 @@ for x in range(1000):
            ========================
            Get the number of days and mementos size 
            Get the URL of the highest duration(in days) -URI-R of Oldest Momentus
+           Get the Number of URL with less than a week old
            """
            if(len(data['mementos']['list']) > 0):
                #convert to default time format
@@ -46,9 +47,12 @@ for x in range(1000):
                daysMementos1.append(delta.days)
                #store the mementos length
                daysMementos2.append(len(data['mementos']['list']))
-               if(delta.days > 8111):
+               if(delta.days > 8112):
                    previousDay = delta.days
                    MAX_DAYS.append(data['original_uri'])
+                   
+               if(delta.days < 7):
+                   old = old +1
            """
            ========================
            VVVVVVVVVV=Q2=VVVVVVVVVV
@@ -121,25 +125,19 @@ print("=============Q3=============")
 print("========Sorted by Days======")
 print("============================")
 print(dM)
+print("\n\n")
+print(l)
+print("\n\n")
+print("Number of URIs less than a week Old")
+print(old)
+#use seaborn
 sns.set_style("whitegrid")
-plt.figure(figsize=(40,15))
+plt.figure(figsize=(40,21))
 plt.title("Q3 Output File")
 g= sns.scatterplot(x="days",y="mementos",data=dM)
 # Show the plot
 plt.show(g)
-"""
-sns.color_palette("dark",as_cmap=True)
-fig, (ax1,ax2) = plt.subplots(1,2,figsize=(40,15))
-sns.scatterplot(data=dM,x="days",y="mementos",size="days",sizes=(17,50),ax=ax1)
-sns.scatterplot(data=dM,x="days",y="mementos",size="days",sizes=(17,50),ax=ax2)
-"""
-
 #fig, ax = plt.subplots(figsize=(40,15),sharex=False,sharey=False)
 #g=sns.scatterplot(data=dM,x="days",y="mementos",size="days",sizes=(17,50))
-
-
-
-
 print("\n\n")
 #For console viewing
-

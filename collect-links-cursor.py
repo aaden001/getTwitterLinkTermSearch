@@ -4,7 +4,7 @@ import sys
 import tweepy
 import requests # for  requesting the url
 from urllib.parse import urlparse # for requesting parse
-
+import time #for time pauses to avoid max retries exceeded
 
 def resovle_url(base_url,count):
     #print("\nProcess:    " +base_url +"\n")
@@ -18,15 +18,19 @@ def resovle_url(base_url,count):
         
         #Ensure a 200 responds 
         if (request.status_code == 200):
+            url  = request.url
+            value =1
             #Gets the domain of the URI
             domain = urlparse(request.url).netloc
             #Ensures its not a twitter domain
             if domain.find("twitter.com") ==-1:
                 url  = request.url
                 value =1
+                print("{} {}    :      {}".format( count,base_url,request.url))
+                print("\n")
             else:
                 #Reduce the counter because link wasnt resolved bc it a twitter domain
-                count = count -1      
+                count = count -1   
         else:
             #Reduce the counter because link wasnt resolved
             count = count -1
@@ -51,7 +55,7 @@ MAX_COUNT = 1000
 count = 1
 url =""
 value =0
-
+start = 1
 blank_dict ={}
 
 # OAuth2 procedure
@@ -75,7 +79,8 @@ try:
                     #print(url)
                     #store link and Ensures distinct url
                     blank_dict[url] = count
-             count = count + 1       
+             count = count + 1 
+             time.sleep(15)
     if count > MAX_COUNT:
         #print("\n\n") 
         #print(len(blank_dict))
@@ -83,16 +88,18 @@ try:
             #Remove excess link added only 1000 distinct links needed
             blank_dict.popitem()
         #used for debugging and print to console to see result values
-        print(blank_dict)
-        #print(len(blank_dict))
+        #[print(key,':',value) for key,value in blank_dict.items()]
+        #print("\n\n")
+
         # swap values with keys
         blank_dict = {value:key for key, value in blank_dict.items()}
         
-        #print result  in folder Q1
-        myfile = "Q1\dict.txt"
+        #store result to a txt file called dict  in folder Q1       
+        myfile = "Q1/dict.txt"
         with open(myfile, 'w') as f: 
             for key, value in blank_dict.items(): 
-                f.write('%s' % (value)) 
+                f.write('%s\n' % (value)) 
+        
         break
 except tweepy.TweepError as e:
   print ("Tweepy Error: %s" % str(e))
