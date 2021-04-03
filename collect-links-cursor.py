@@ -59,8 +59,8 @@ start = 1
 blank_dict ={}
 
 # OAuth2 procedure
-consumer_key = "pnUItdX31QmYpHBFlVcYbocKQ"      # INSERT YOUR KEY HERE
-consumer_secret = "gFNX2iztwhfL1tROFCX3UomwRbU8GjUJhHzLQat8DGxvBcyVmw"   # INSERT YOUR KEY HERE
+consumer_key = ""      # INSERT YOUR KEY HERE
+consumer_secret = ""   # INSERT YOUR KEY HERE
 auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
 api = tweepy.API(auth)
 
